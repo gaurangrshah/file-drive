@@ -1,11 +1,11 @@
-import ConvexClientProvider from "./auth/convex-client-provider";
+import { ConvexClientProvider } from "./auth/convex-client-provider";
 
 type ProvidersProps = {
   children: React.ReactNode;
 }
 
 
-export default function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   return (
     <ConvexClientProvider>
       {children}

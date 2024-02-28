@@ -1,6 +1,6 @@
 "use client"
 
-import AuthButtons from "@/components/auth/auth-buttons";
+import { AuthButtons } from "@/components/auth/auth-buttons";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
