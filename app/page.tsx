@@ -1,8 +1,16 @@
+"use client"
+
 import AuthButtons from "@/components/auth/auth-buttons";
-import { env } from "@/lib/env";
+import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
 import Image from "next/image";
 
 export default function Home() {
+
+  const createFile = useMutation(api.files.createFile)
+  const files = useQuery(api.files.getFiles)
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -28,6 +36,7 @@ export default function Home() {
             />
           </a>
           <AuthButtons />
+          <Button onClick={() => createFile({ name: "hello world" })}>Hello World</Button>
         </div>
       </div>
 
@@ -111,6 +120,9 @@ export default function Home() {
           </p>
         </a>
       </div>
+      {/* {files?.map((file) => (
+        <span key={file?.id ?? "test"}>{file.name}</span>
+      ))} */}
     </main>
   );
 }
