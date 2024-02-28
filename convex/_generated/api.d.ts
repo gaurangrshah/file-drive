@@ -14,7 +14,11 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as files from "../files.js";
+import type * as clerk from "../clerk.js";
+import type * as http from "../http.js";
+import type * as mutations_files from "../mutations/files.js";
+import type * as mutations_users from "../mutations/users.js";
+import type * as queries_files from "../queries/files.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -25,7 +29,11 @@ import type * as files from "../files.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  files: typeof files;
+  clerk: typeof clerk;
+  http: typeof http;
+  "mutations/files": typeof mutations_files;
+  "mutations/users": typeof mutations_users;
+  "queries/files": typeof queries_files;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

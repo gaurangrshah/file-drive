@@ -1,7 +1,7 @@
 const config = {
   providers: [
     {
-      domain: "https://peaceful-bull-31.clerk.accounts.dev",
+      domain: process.env.CLERK_HOSTNAME,
       applicationID: "convex",
     },
   ],

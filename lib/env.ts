@@ -1,6 +1,7 @@
+import { z, ZodError } from "zod";
+
 import { createEnv } from "@t3-oss/env-nextjs";
 import { vercel } from "@t3-oss/env-nextjs/presets";
-import { ZodError, z } from "zod";
 
 // @TOOD: Add schema validation on build step
 // @SEE: https://env.t3.gg/docs/nextjs#validate-schema-on-build-(recommended)
@@ -10,6 +11,7 @@ export const env = createEnv({
   server: {
     CONVEX_DEPLOYMENT: z.string().url(),
     CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_HOSTNAME: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
