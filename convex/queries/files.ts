@@ -1,7 +1,7 @@
 import { v } from 'convex/values';
 
 import { query } from '../_generated/server';
-import { hasAccessToOrg } from './users';
+import { hasAccessToOrg } from '../utils';
 
 export const getFiles = query({
   args: {
@@ -9,10 +9,7 @@ export const getFiles = query({
   },
   async handler(ctx, args) {
     const hasAccess = await hasAccessToOrg(ctx, args.orgId);
-
-    if (!hasAccess) {
-      return [];
-    }
+    if (!hasAccess) return [];
 
     return ctx.db
       .query("files")
