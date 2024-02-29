@@ -1,11 +1,15 @@
 "use client"
 
-import { useMutation } from 'convex/react';
+import {
+  useMutation,
+  useQuery,
+} from 'convex/react';
 import Image from 'next/image';
 
 import { AuthButtons } from '@/components/auth/auth-buttons';
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
+import { RawFiles } from '@/convex/schema';
 import {
   useOrganization,
   useUser,
@@ -18,9 +22,8 @@ export default function Home() {
   // query is being scoped by the orgId which we've defined in file://../convex/files.ts
   // first ensure the orgId is loaded and then pass it to the query or skip if no orgId
   const orgId = organization.organization?.id ?? user.user?.id!; // user id must exist
-  const currentOrgId = organization.isLoaded && user.isLoaded ? { orgId } : "skip";
-  // const files = useQuery(api.queries.files.getFiles, { orgId: currentOrgId })
-
+  const currentOrgId = String(organization.isLoaded && user.isLoaded ? orgId : "skip");
+  const files = useQuery(api.queries.files.getFiles, { orgId: currentOrgId })
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -133,9 +136,9 @@ export default function Home() {
           </p>
         </a>
       </div>
-      {/* {files?.map((file) => (
-        <span key={file?.id ?? "test"}>{file.name}</span>
-      ))} */}
+      {files?.map((file: RawFiles) => (
+        <span key={file?._id ?? "test"}>{file.name}</span>
+      ))}
     </main>
   );
 }

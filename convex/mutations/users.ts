@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 
 import { internalMutation } from "../_generated/server";
+import { getUser } from "../queries/users";
 
 // @NOTE: Internal mutations will only be run from within the convex runtime
 // we're using them here to sync our database with clerks users via webhooks
@@ -25,13 +26,7 @@ export const addOrgIdToUser = internalMutation({
     orgId: v.string(),
   },
   async handler(ctx, args) {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_tokenIdentifier", (q) =>
-        q.eq("tokenIdentifier", args.tokenIdentifier)
-      )
-      .first();
-
+    const user = await getUser(ctx, args.tokenIdentifier);
     if (!user) throw new ConvexError("Expected user to be defined.");
 
     await ctx.db.patch(user._id, {

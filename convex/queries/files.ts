@@ -1,15 +1,16 @@
-import { v } from "convex/values";
+import { v } from 'convex/values';
 
-import { query } from "../_generated/server";
+import { query } from '../_generated/server';
+import { hasAccessToOrg } from './users';
 
 export const getFiles = query({
   args: {
     orgId: v.string() || "skip",
   },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
+    const hasAccess = await hasAccessToOrg(ctx, args.orgId);
 
-    if (!identity) {
+    if (!hasAccess) {
       return [];
     }
 

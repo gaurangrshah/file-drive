@@ -31,12 +31,13 @@ http.route({
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.mutations.users.createUser, {
-            tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
+            tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.id}`,
             // name: `${result.data.first_name ?? ""} ${
             //   result.data.last_name ?? ""
             // }`,
             // image: result.data.image_url,
           });
+          console.log(`user.created ${result.data.id}`);
           break;
         // case "user.updated":
         //   await ctx.runMutation(internal.users.updateUser, {
@@ -48,11 +49,16 @@ http.route({
         //   });
         //   break;
         case "organizationMembership.created":
+          console.log("adding org to user");
           await ctx.runMutation(internal.mutations.users.addOrgIdToUser, {
-            tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
+            tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
             orgId: result.data.organization.id,
             // role: result.data.role === "org:admin" ? "admin" : "member",
           });
+
+          console.log(
+            `user: ${result.data.public_user_data.user_id} organizationMembership.created ${result.data.organization.id}`
+          );
           break;
         // case "organizationMembership.updated":
         //   console.log(result.data.role);
