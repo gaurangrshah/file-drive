@@ -29,9 +29,9 @@ import {
   FileCardActions,
   getFileUrl,
 } from './file-actions';
-import { AspectRatio } from './ui/aspect-ratio';
+import { AspectRatio } from '../../../components/ui/aspect-ratio';
 import { BlurImage } from './blur-image';
-import { Badge } from './ui/badge';
+import { Badge } from '../../../components/ui/badge';
 import FileBadge from './file-badge';
 
 export function FileCard({
@@ -62,7 +62,7 @@ export function FileCard({
       </CardHeader>
       <CardContent className="w-full max-h-[250px] flex justify-center items-center">
         {file.type === "image" && (
-          <AspectRatio ratio={16 / 9} className='w-full h-full'>
+          <AspectRatio ratio={16 / 9} className='w-full h-full shadow-sm rounded-md border-gray-400 overflow-hidden'>
             <Image
               alt={file.name}
               src={getFileUrl(file.fileId)}

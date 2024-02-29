@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import {
   OrganizationSwitcher,
@@ -9,6 +10,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import FileMenu from "./file-menu";
+import { SearchBar } from "./search-bar";
 
 export function Header() {
   return (

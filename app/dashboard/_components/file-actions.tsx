@@ -34,7 +34,7 @@ import {
 } from '@/convex/_generated/dataModel';
 import { env } from '@/lib/env';
 
-import { ToastMessage } from './ui/sonner';
+import { ToastMessage } from '../../../components/ui/sonner';
 
 export function FileCardActions({
   file,

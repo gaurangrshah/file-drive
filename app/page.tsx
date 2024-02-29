@@ -5,7 +5,7 @@ import {
   useQuery,
 } from 'convex/react';
 
-import { FileCard } from '@/components/file-card';
+import { FileCard } from '@/app/dashboard/_components/file-card';
 import { UploadButton } from '@/components/upload-button';
 import { api } from '@/convex/_generated/api';
 import { RawFiles } from '@/convex/schema';
@@ -15,9 +15,10 @@ import {
 } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { EmptyFiles } from './_components/interface/empty-files';
+import { EmptyFiles } from './dashboard/_components/empty-files';
 import { BgGradientBlur } from './_components/interface/bg-gradient-blur';
 import { Loader2 } from 'lucide-react';
+import { SearchBar } from './_components/interface/search-bar';
 
 export default function Home() {
   const organization = useOrganization()
@@ -33,23 +34,7 @@ export default function Home() {
   return (
     <main className="container mx-auto p-12">
       <BgGradientBlur />
-      {isLoading ? (
-        <div className='flex flex-col justify-center items-center w-full relative'>
-          <Loader2
-            className="animate-spin flex-1"
-          />
-        </div>
-      ) : files.length === 0 ? <EmptyFiles /> : null}
-      <div className="relative isolate px-6 pt-14 lg:px-6">
-        <h1 className='text-4xl font-bold'>Your Files</h1>
-        <UploadButton />
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        {files?.map((file: RawFiles) => (
-          <FileCard key={file?._id ?? "test"} file={{ ...file, isFavorited: false }} />
-        ))}
-      </div>
-      <div className="mx-auto max-w-2xl py-8">
+      <div className="mx-auto max-w-2xl py-8 min-h-[90dvh]">
         <div className="text-center">
           <Image
             src="/logo.png"
@@ -68,7 +53,7 @@ export default function Home() {
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
-              href="/dashboard/files"
+              href="#filelist"
               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Get started
@@ -82,6 +67,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+
     </main>
   );
 }
