@@ -32,6 +32,7 @@ import {
   Doc,
   Id,
 } from '@/convex/_generated/dataModel';
+import { env } from '@/lib/env';
 
 import { ToastMessage } from './ui/sonner';
 
@@ -150,5 +151,5 @@ export function FileCardActions({
 }
 
 export function getFileUrl(fileId: Id<"_storage">): string {
-  return `${process.env.NEXT_PUBLIC_CONVEX_URL}/api/storage/${fileId}`;
+  return `${env.NEXT_PUBLIC_CONVEX_URL}/api/storage/${fileId}`;
 }
