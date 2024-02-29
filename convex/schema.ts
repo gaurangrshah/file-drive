@@ -7,12 +7,20 @@ import { v } from 'convex/values';
 
 import { Doc } from './_generated/dataModel';
 
-const fileValidator = v.object({
+export const fileTypes = v.union(
+  v.literal("image"),
+  v.literal("csv"),
+  v.literal("pdf")
+);
+
+export const fileValidator = v.object({
   name: v.string(),
+  type: fileTypes,
   orgId: v.string(),
+  fileId: v.id("_storage"),
 });
 
-const userValidator = v.object({
+export const userValidator = v.object({
   tokenIdentifier: v.string(),
   orgIds: v.array(v.string()),
 });
