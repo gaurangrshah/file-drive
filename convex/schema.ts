@@ -1,16 +1,13 @@
-import {
-  defineSchema,
-  defineTable,
-  WithoutSystemFields,
-} from 'convex/server';
-import { v } from 'convex/values';
+import { defineSchema, defineTable, WithoutSystemFields } from "convex/server";
+import { v } from "convex/values";
 
-import { Doc } from './_generated/dataModel';
+import { Doc } from "./_generated/dataModel";
 
 export const fileTypes = v.union(
   v.literal("image"),
   v.literal("csv"),
-  v.literal("pdf")
+  v.literal("pdf"),
+  v.literal("markdown")
 );
 
 export const fileValidator = v.object({
@@ -42,3 +39,13 @@ export type CvxFiles = WithoutSystemFields<Doc<"files">>;
 
 export type RawUsers = Doc<"users">;
 export type CvxUsers = WithoutSystemFields<Doc<"users">>;
+
+export const fileTypesMap = {
+  "image/png": "image",
+  "image/jpg": "image",
+  "image/jpeg": "image",
+  "image/svg+xml": "image",
+  "application/pdf": "pdf",
+  "text/csv": "csv",
+  "text/markdown": "markdown",
+} as Record<string, RawFiles["type"]>;

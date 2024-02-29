@@ -1,8 +1,10 @@
 import { formatRelative } from 'date-fns';
 import {
+  FileIcon,
   FileTextIcon,
   GanttChartIcon,
   ImageIcon,
+  Text,
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -29,6 +31,8 @@ import {
 } from './file-actions';
 import { AspectRatio } from './ui/aspect-ratio';
 import { BlurImage } from './blur-image';
+import { Badge } from './ui/badge';
+import FileBadge from './file-badge';
 
 export function FileCard({
   file,
@@ -43,6 +47,7 @@ export function FileCard({
     image: <ImageIcon />,
     pdf: <FileTextIcon />,
     csv: <GanttChartIcon />,
+    markdown: <FileTextIcon />,
   } as Record<Doc<"files">["type"], React.ReactNode>;
 
   return (
@@ -71,8 +76,16 @@ export function FileCard({
 
         )}
 
-        {file.type === "csv" && <GanttChartIcon className="w-20 h-20" />}
-        {file.type === "pdf" && <FileTextIcon className="w-20 h-20" />}
+        {file.type === "csv" && (
+          <FileBadge type="csv" className="bg-green-600">
+            <GanttChartIcon className="w-32 h-32 border-2 border-blue-400 py-2 rounded-md" /></FileBadge>
+        )}
+        {file.type === "pdf" && (
+          <FileBadge type="pdf" className="bg-red-600" />
+        )}
+        {file.type === "markdown" && (
+          <FileBadge type="md" className="bg-gray-600" />
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="flex gap-2 text-xs text-gray-700 w-40 items-center">
@@ -82,8 +95,9 @@ export function FileCard({
           </Avatar>
           {/* {userProfile?.name} */}
         </div>
-        <div className="text-xs text-gray-700">
-          Uploaded on {formatRelative(new Date(file._creationTime), new Date())}
+        <div className="text-[10px] text-gray-700">
+          Uploaded: <br />
+          {formatRelative(new Date(file._creationTime), new Date())}
         </div>
       </CardFooter>
     </Card>
