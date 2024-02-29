@@ -1,7 +1,7 @@
 "use client"
 
-import { useTheme } from "next-themes"
-import { Toaster as Sonner } from "sonner"
+import { useTheme } from 'next-themes';
+import { Toaster as Sonner } from 'sonner';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
@@ -28,4 +28,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
-export { Toaster }
+function ToastMessage({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <strong className="block">{title}</strong>
+      <p>{description}</p>
+    </div>
+  )
+}
+
+export { Toaster, ToastMessage };
