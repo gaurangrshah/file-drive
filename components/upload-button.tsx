@@ -121,7 +121,7 @@ export function UploadButton() {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Upload File</Button>
+        <Button variant="secondary">Upload File</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

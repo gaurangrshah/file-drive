@@ -5,10 +5,10 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-  useSession,
 } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import FileMenu from "./file-menu";
 
 export function Header() {
   return (
@@ -20,9 +20,7 @@ export function Header() {
         </Link>
 
         <SignedIn>
-          <Button variant={"outline"}>
-            <Link href="/dashboard/files">Your Files</Link>
-          </Button>
+          <FileMenu />
         </SignedIn>
 
         <div className="flex gap-2">
