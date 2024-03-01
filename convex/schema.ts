@@ -26,7 +26,6 @@ export const userValidator = v.object({
       role: roles,
     })
   ),
-  role: roles,
 });
 
 export const favorites = v.object({

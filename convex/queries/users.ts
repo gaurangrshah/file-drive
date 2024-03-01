@@ -1,9 +1,6 @@
-import { ConvexError } from 'convex/values';
+import { ConvexError } from "convex/values";
 
-import type {
-  MutationCtx,
-  QueryCtx,
-} from '../_generated/server';
+import type { MutationCtx, QueryCtx } from "../_generated/server";
 
 export async function getUser(
   ctx: QueryCtx | MutationCtx,
@@ -15,6 +12,7 @@ export async function getUser(
       q.eq("tokenIdentifier", tokenIdentifier)
     )
     .first();
+
   if (!user) throw new ConvexError("Expected user to be defined.");
 
   return user;

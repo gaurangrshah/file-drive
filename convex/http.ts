@@ -49,7 +49,6 @@ http.route({
         //   });
         //   break;
         case "organizationMembership.created":
-          console.log("adding org to user");
           await ctx.runMutation(internal.mutations.users.addOrgIdToUser, {
             tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
             orgId: result.data.organization.id,
@@ -60,14 +59,16 @@ http.route({
             `user: ${result.data.public_user_data.user_id} organizationMembership.created ${result.data.organization.id}`
           );
           break;
-        // case "organizationMembership.updated":
-        //   console.log(result.data.role);
-        //   await ctx.runMutation(internal.users.updateRoleInOrgForUser, {
-        //     tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
-        //     orgId: result.data.organization.id,
-        //     role: result.data.role === "org:admin" ? "admin" : "member",
-        //   });
-        //   break;
+        case "organizationMembership.updated":
+          await ctx.runMutation(
+            internal.mutations.users.updateRoleInOrgForUser,
+            {
+              tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
+              orgId: result.data.organization.id,
+              role: result.data.role === "org:admin" ? "admin" : "member",
+            }
+          );
+          break;
       }
 
       return new Response(null, {
