@@ -24,7 +24,6 @@ export const getFiles = query({
 
     // if favorites is true, we only want to return files that are favorited
     if (args.favorites) {
-      console.log("🚀 | checking favorites:", args.favorites);
       const favorites = await ctx.db
         .query("favorites")
         .withIndex("by_userId_orgId_fileId", (q) =>
