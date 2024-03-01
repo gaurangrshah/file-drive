@@ -32,9 +32,9 @@ export default function Home() {
 
   const isLoading = files === undefined;
   return (
-    <main className="container mx-auto p-12">
+    <main className="container m-auto p-12 flex-1">
       <BgGradientBlur />
-      <div className="mx-auto max-w-2xl py-8 min-h-[90dvh]">
+      <div className="mx-auto max-w-2xl py-8 mt-24">
         <div className="text-center">
           <Image
             src="/logo.png"
