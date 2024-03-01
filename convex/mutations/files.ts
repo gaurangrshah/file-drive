@@ -1,6 +1,6 @@
 import { ConvexError, v } from "convex/values";
 
-import { mutation } from "../_generated/server";
+import { internalMutation, mutation } from "../_generated/server";
 import { fileTypes, favorites } from "../schema";
 import { hasAccessToOrg } from "../utils";
 
@@ -114,5 +114,29 @@ export const restoreFile = mutation({
 
     await ctx.db.patch(args.fileId, { shouldDelete: false });
     // await ctx.db.delete(args.fileId);
+  },
+});
+
+// this is run by a cron job from file:///../cron.ts
+export const deleteAllFiles = internalMutation({
+  args: {},
+  async handler(ctx) {
+    console.log("deleting files cron running...");
+    const files = await ctx.db
+      .query("files")
+      .withIndex("by_shouldDelete", (q) => q.eq("shouldDelete", true))
+      .collect();
+
+    console.log("files to delete", files?.length);
+    if (!files?.length) {
+      return;
+    }
+    await Promise.all(
+      files.map(async (file) => {
+        console.log("deleting file", file._id);
+        await ctx.storage.delete(file.fileId);
+        return await ctx.db.delete(file._id);
+      })
+    );
   },
 });

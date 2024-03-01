@@ -38,7 +38,9 @@ export const favorites = v.object({
 export default defineSchema({
   // handlers: file:///./mutations/files.ts
   // queries: file:///./queries/files.ts
-  files: defineTable(fileValidator).index("by_orgId", ["orgId"]),
+  files: defineTable(fileValidator)
+    .index("by_orgId", ["orgId"])
+    .index("by_shouldDelete", ["shouldDelete"]),
   // handlers: file:///./mutations/users.ts
   // queries: file:///./queries/users.ts
   users: defineTable(userValidator).index("by_tokenIdentifier", [

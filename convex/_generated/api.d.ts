@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as clerk from "../clerk.js";
+import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as mutations_favorites from "../mutations/favorites.js";
 import type * as mutations_files from "../mutations/files.js";
@@ -34,6 +35,7 @@ import type * as utils from "../utils.js";
  */
 declare const fullApi: ApiFromModules<{
   clerk: typeof clerk;
+  crons: typeof crons;
   http: typeof http;
   "mutations/favorites": typeof mutations_favorites;
   "mutations/files": typeof mutations_files;
