@@ -85,3 +85,34 @@ export const deleteFile = mutation({
     // await ctx.db.delete(args.fileId);
   },
 });
+
+export const restoreFile = mutation({
+  args: { fileId: v.id("files") },
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError("you must be logged in to upload a file");
+    }
+
+    const file = await ctx.db.get(args.fileId);
+    if (!file) {
+      throw new ConvexError("File not found");
+    }
+    const access = await hasAccessToOrg(ctx, file.orgId);
+    if (!access) {
+      throw new ConvexError("You do not have access to this organization.");
+    }
+
+    const isAdmin =
+      access.user.orgIds.find((org) => org.orgId === file.orgId)?.role ===
+      "admin";
+
+    if (!isAdmin) {
+      throw new ConvexError("You do not have sufficient privileges.");
+    }
+
+    await ctx.db.patch(args.fileId, { shouldDelete: false });
+    // await ctx.db.delete(args.fileId);
+  },
+});

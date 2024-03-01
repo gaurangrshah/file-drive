@@ -7,6 +7,7 @@ import {
   StarHalf,
   StarIcon,
   TrashIcon,
+  UndoIcon,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -45,7 +46,7 @@ export function FileCardActions({
   isFavorited: boolean;
 }) {
   const deleteFile = useMutation(api.mutations.files.deleteFile);
-  // const restoreFile = useMutation(api.files.restoreFile);
+  const restoreFile = useMutation(api.mutations.files.restoreFile);
   const toggleFavorite = useMutation(api.mutations.favorites.toggleFavorite);
   // const me = useQuery(api.users.getMe);
 
@@ -122,25 +123,25 @@ export function FileCardActions({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                // if (file.shouldDelete) {
-                //   restoreFile({
-                //     fileId: file._id,
-                //   });
-                // } else {
-                setIsConfirmOpen(true);
-                // }
+                if (file.shouldDelete) {
+                  restoreFile({
+                    fileId: file._id,
+                  });
+                } else {
+                  setIsConfirmOpen(true);
+                }
               }}
               className="flex gap-1 items-center cursor-pointer"
             >
-              {/* {file.shouldDelete ? (
+              {file.shouldDelete ? (
                 <div className="flex gap-1 text-green-600 items-center cursor-pointer">
                   <UndoIcon className="w-4 h-4" /> Restore
                 </div>
-              ) : ( */}
-              <div className="flex gap-1 text-red-600 items-center cursor-pointer">
-                <TrashIcon className="w-4 h-4" /> Delete
-              </div>
-              {/* )} */}
+              ) : (
+                <div className="flex gap-1 text-red-600 items-center cursor-pointer">
+                  <TrashIcon className="w-4 h-4" /> Delete
+                </div>
+              )}
             </DropdownMenuItem>
           </Protect>
         </DropdownMenuContent>
