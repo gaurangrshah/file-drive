@@ -34,9 +34,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
-import { Input } from './ui/input';
-import { ToastMessage } from './ui/sonner';
+} from '../../../components/ui/form';
+import { Input } from '../../../components/ui/input';
+import { ToastMessage } from '../../../components/ui/sonner';
 import { fileTypesMap } from '@/convex/schema';
 
 const formSchema = z.object({

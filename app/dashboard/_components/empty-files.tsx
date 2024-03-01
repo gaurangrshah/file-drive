@@ -1,6 +1,5 @@
-import { UploadButton } from '@/components/upload-button'
+import { UploadButton } from '@/app/_components/interface/upload-button'
 import Image from 'next/image'
-import React from 'react'
 
 export function EmptyFiles({ extend }: { extend?: boolean }) {
   return (

@@ -1,5 +1,5 @@
 import { ConvexClientProvider } from './auth/convex-client-provider';
-import { Toaster } from './ui/sonner';
+import { Toaster } from '../../../components/ui/sonner';
 
 type ProvidersProps = {
   children: React.ReactNode;

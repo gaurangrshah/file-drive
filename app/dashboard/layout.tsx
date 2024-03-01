@@ -1,6 +1,5 @@
 "use client"
 
-import { SearchBar } from "../_components/interface/search-bar";
 import { SideNav } from "./_components/side-nav";
 
 export default function DashboardLayout({

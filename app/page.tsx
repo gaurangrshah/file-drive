@@ -1,24 +1,14 @@
 "use client"
 
-import {
-  useMutation,
-  useQuery,
-} from 'convex/react';
-
-import { FileCard } from '@/app/dashboard/_components/file-card';
-import { UploadButton } from '@/components/upload-button';
+import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { RawFiles } from '@/convex/schema';
 import {
   useOrganization,
   useUser,
 } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { EmptyFiles } from './dashboard/_components/empty-files';
 import { BgGradientBlur } from './_components/interface/bg-gradient-blur';
-import { Loader2 } from 'lucide-react';
-import { SearchBar } from './_components/interface/search-bar';
 
 export default function Home() {
   const organization = useOrganization()

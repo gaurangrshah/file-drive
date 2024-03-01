@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { UploadButton } from '@/components/upload-button'
+import { UploadButton } from '@/app/_components/interface/upload-button'
 import Link from 'next/link'
 
 
