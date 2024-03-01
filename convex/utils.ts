@@ -51,3 +51,28 @@ export async function hasAccessToFile(
 
   return { user: hasAccess.user, file };
 }
+
+export async function canActOnFile(
+  ctx: QueryCtx | MutationCtx,
+  fileId: Id<"files">
+) {
+  const access = await hasAccessToFile(ctx, fileId);
+
+  if (!access) {
+    return null;
+  }
+
+  const ownsFile = access?.user._id === access?.file.userId;
+
+  // user can perform protected file actions if they own the file or are an admin of the org
+  const canOperate =
+    ownsFile ||
+    access?.user.orgIds.find((org) => org.orgId === access.file.orgId)?.role ===
+      "admin";
+
+  if (!canOperate) {
+    return null;
+  }
+
+  return access;
+}

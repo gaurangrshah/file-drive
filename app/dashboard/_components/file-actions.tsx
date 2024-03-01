@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import {
   FileIcon,
   MoreVertical,
@@ -48,7 +48,7 @@ export function FileCardActions({
   const deleteFile = useMutation(api.mutations.files.deleteFile);
   const restoreFile = useMutation(api.mutations.files.restoreFile);
   const toggleFavorite = useMutation(api.mutations.favorites.toggleFavorite);
-  // const me = useQuery(api.users.getMe);
+  const me = useQuery(api.queries.users.getMe);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -114,8 +114,7 @@ export function FileCardActions({
               return (
                 check({
                   role: "org:admin",
-                })
-                // || file.userId === me?._id
+                }) || file.userId === me?._id
               );
             }}
             fallback={<></>}

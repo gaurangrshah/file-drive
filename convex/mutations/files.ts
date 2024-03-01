@@ -2,7 +2,7 @@ import { ConvexError, v } from "convex/values";
 
 import { internalMutation, mutation } from "../_generated/server";
 import { fileTypes, favorites } from "../schema";
-import { hasAccessToOrg } from "../utils";
+import { canActOnFile, hasAccessToFile, hasAccessToOrg } from "../utils";
 
 export const createFile = mutation({
   args: {
@@ -40,36 +40,15 @@ export const generateUploadUrl = mutation(async (ctx) => {
 export const deleteFile = mutation({
   args: { fileId: v.id("files") },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (!identity) {
-      throw new ConvexError("you must be logged in to upload a file");
-    }
-
-    const file = await ctx.db.get(args.fileId);
-    if (!file) {
-      throw new ConvexError("File not found");
-    }
-    const access = await hasAccessToOrg(ctx, file.orgId);
-    if (!access) {
-      throw new ConvexError("You do not have access to this organization.");
-    }
-
-    const isAdmin =
-      access.user.orgIds.find((org) => org.orgId === file.orgId)?.role ===
-      "admin";
-
-    if (!isAdmin) {
-      throw new ConvexError("You do not have sufficient privileges.");
-    }
+    const access = await canActOnFile(ctx, args.fileId);
 
     // ! Implemented removal of favorites before file deletion.
     const favorites = await ctx.db
       .query("favorites")
       .withIndex("by_userId_orgId_fileId", (q) =>
         q
-          .eq("userId", access.user._id)
-          .eq("orgId", file.orgId)
+          .eq("userId", access?.user._id!)
+          .eq("orgId", access?.file.orgId!)
           .eq("fileId", args.fileId)
       )
       .collect();
@@ -90,26 +69,8 @@ export const deleteFile = mutation({
 export const restoreFile = mutation({
   args: { fileId: v.id("files") },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (!identity) {
-      throw new ConvexError("you must be logged in to upload a file");
-    }
-
-    const file = await ctx.db.get(args.fileId);
-    if (!file) {
-      throw new ConvexError("File not found");
-    }
-    const access = await hasAccessToOrg(ctx, file.orgId);
+    const access = await canActOnFile(ctx, args.fileId);
     if (!access) {
-      throw new ConvexError("You do not have access to this organization.");
-    }
-
-    const isAdmin =
-      access.user.orgIds.find((org) => org.orgId === file.orgId)?.role ===
-      "admin";
-
-    if (!isAdmin) {
       throw new ConvexError("You do not have sufficient privileges.");
     }
 
