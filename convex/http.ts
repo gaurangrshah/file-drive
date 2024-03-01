@@ -53,7 +53,7 @@ http.route({
           await ctx.runMutation(internal.mutations.users.addOrgIdToUser, {
             tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
             orgId: result.data.organization.id,
-            // role: result.data.role === "org:admin" ? "admin" : "member",
+            role: result.data.role === "org:admin" ? "admin" : "member",
           });
 
           console.log(

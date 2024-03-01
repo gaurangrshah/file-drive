@@ -23,7 +23,7 @@ export async function hasAccessToOrg(
   }
 
   const hasAccess =
-    user.orgIds.some((item) => item === orgId) ||
+    user.orgIds.some((org) => org.orgId === orgId) ||
     user.tokenIdentifier.includes(orgId);
 
   if (!hasAccess) {

@@ -17,9 +17,16 @@ export const fileValidator = v.object({
   fileId: v.id("_storage"),
 });
 
+export const roles = v.union(v.literal("admin"), v.literal("member"));
 export const userValidator = v.object({
   tokenIdentifier: v.string(),
-  orgIds: v.array(v.string()),
+  orgIds: v.array(
+    v.object({
+      orgId: v.string(),
+      role: roles,
+    })
+  ),
+  role: roles,
 });
 
 export const favorites = v.object({

@@ -1,11 +1,8 @@
-import {
-  ConvexError,
-  v,
-} from 'convex/values';
+import { ConvexError, v } from "convex/values";
 
-import { mutation } from '../_generated/server';
-import { fileTypes } from '../schema';
-import { hasAccessToOrg } from '../utils';
+import { mutation } from "../_generated/server";
+import { fileTypes, favorites } from "../schema";
+import { hasAccessToOrg } from "../utils";
 
 export const createFile = mutation({
   args: {
@@ -52,9 +49,33 @@ export const deleteFile = mutation({
     if (!file) {
       throw new ConvexError("File not found");
     }
-    const hasAccess = await hasAccessToOrg(ctx, file.orgId);
-    if (!hasAccess) {
+    const access = await hasAccessToOrg(ctx, file.orgId);
+    if (!access) {
       throw new ConvexError("You do not have access to this organization.");
+    }
+
+    const isAdmin =
+      access.user.orgIds.find((org) => org.orgId === file.orgId)?.role ===
+      "admin";
+
+    if (!isAdmin) {
+      throw new ConvexError("You do not have sufficient privileges.");
+    }
+    // @TODO: remove any asscoiated favorites
+    const favorites = await ctx.db
+      .query("favorites")
+      .withIndex("by_userId_orgId_fileId", (q) =>
+        q
+          .eq("userId", access.user._id)
+          .eq("orgId", file.orgId)
+          .eq("fileId", args.fileId)
+      )
+      .collect();
+    console.log("🚀 | favorites:", favorites);
+
+    for (const favorite of favorites) {
+      console.log("deleting", favorite._id);
+      await ctx.db.delete(favorite._id);
     }
 
     await ctx.db.delete(args.fileId);
