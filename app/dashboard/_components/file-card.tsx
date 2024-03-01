@@ -1,10 +1,8 @@
 import { formatRelative } from 'date-fns';
 import {
-  FileIcon,
   FileTextIcon,
   GanttChartIcon,
   ImageIcon,
-  Text,
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -30,8 +28,6 @@ import {
   getFileUrl,
 } from './file-actions';
 import { AspectRatio } from '../../../components/ui/aspect-ratio';
-import { BlurImage } from './blur-image';
-import { Badge } from '../../../components/ui/badge';
 import FileBadge from './file-badge';
 
 export function FileCard({
