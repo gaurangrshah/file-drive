@@ -62,6 +62,7 @@ export const deleteFile = mutation({
       throw new ConvexError("You do not have sufficient privileges.");
     }
 
+    // ! Implemented removal of favorites before file deletion.
     const favorites = await ctx.db
       .query("favorites")
       .withIndex("by_userId_orgId_fileId", (q) =>

@@ -26,7 +26,7 @@ export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: stri
   }
 
   const _favorites = useQuery(api.queries.favorites.getAllFavorites, { orgId: orgId! })
-  const files = useQuery(api.queries.files.getFiles, { orgId: orgId!, query, favorites: favoritesOnly, deletedOnly })
+  const files = useQuery(api.queries.files.getFiles, { orgId: orgId!, query, favoritesOnly, deletedOnly })
 
   // @TODO: this is a bit of a mess, we should probably just use a join query
   // to get the favorited status of each file

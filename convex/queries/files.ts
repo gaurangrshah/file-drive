@@ -7,7 +7,7 @@ export const getFiles = query({
   args: {
     orgId: v.optional(v.string()),
     query: v.optional(v.string()),
-    favorites: v.optional(v.boolean()), // TODO: change to favrotiesOnly
+    favoritesOnly: v.optional(v.boolean()), // ! renamed to favoritesOnly
     deletedOnly: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
@@ -24,7 +24,7 @@ export const getFiles = query({
     if (!hasAccess.user) return files;
 
     // if favorites is true, we only want to return files that are favorited
-    if (args.favorites) {
+    if (args.favoritesOnly) {
       const favorites = await ctx.db
         .query("favorites")
         .withIndex("by_userId_orgId_fileId", (q) =>

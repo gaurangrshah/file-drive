@@ -58,8 +58,7 @@ export function FileCardActions({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action will mark the file for our deletion process. Files are
-              deleted periodically
+              This action will mark the file for our deletion process. Which will remove all favorites and associated metadata. Files are deleted periodically from the system.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
