@@ -2,7 +2,7 @@ import { UploadButton } from '@/components/upload-button'
 import Image from 'next/image'
 import React from 'react'
 
-export function EmptyFiles() {
+export function EmptyFiles({ extend }: { extend?: boolean }) {
   return (
     <div className="col-span-4 text-center">
       <Image
@@ -13,11 +13,11 @@ export function EmptyFiles() {
         className="inline-block mb-8"
       />
       <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl pb-8">
-        You have no files yet.
+        You have no {extend ? "favorites" : "files"} yet.
       </h1>
       <UploadButton />
       <p className="mt-6 text-lg leading-8 text-gray-600">
-        Start uploading files and share them with your company.
+        {extend ? "Add files to your favorites from the 'All Files' tab in the sidebar." : "Add files to your organization by clicking the 'Upload File' button."}
       </p>
     </div>
   )

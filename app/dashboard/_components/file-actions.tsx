@@ -35,6 +35,7 @@ import {
 import { env } from '@/lib/env';
 
 import { ToastMessage } from '../../../components/ui/sonner';
+import { Protect } from '@clerk/nextjs';
 
 export function FileCardActions({
   file,
@@ -99,51 +100,50 @@ export function FileCardActions({
             }}
             className="flex gap-1 items-center cursor-pointer"
           >
-            {isFavorited ? (
-              <div className="flex gap-1 items-center">
-                <StarIcon className="w-4 h-4" /> Unfavorite
-              </div>
-            ) : (
-              <div className="flex gap-1 items-center">
-                <StarHalf className="w-4 h-4" /> Favorite
-              </div>
-            )}
+            <div className="flex gap-1 items-center">
+              {isFavorited ? (
+                <><StarIcon className="w-4 h-4 fill-yellow-300 stroke-[0.5]" /> Unfavorite</>
+              ) : (
+                <><StarHalf className="w-4 h-4" /> Favorite</>
+              )}
+            </div>
           </DropdownMenuItem>
 
-          {/* <Protect
+          <Protect
             condition={(check) => {
               return (
                 check({
                   role: "org:admin",
-                }) || file.userId === me?._id
+                })
+                // || file.userId === me?._id
               );
             }}
             fallback={<></>}
-          > */}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              // if (file.shouldDelete) {
-              //   restoreFile({
-              //     fileId: file._id,
-              //   });
-              // } else {
-              setIsConfirmOpen(true);
-              // }
-            }}
-            className="flex gap-1 items-center cursor-pointer"
           >
-            {/* {file.shouldDelete ? (
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                // if (file.shouldDelete) {
+                //   restoreFile({
+                //     fileId: file._id,
+                //   });
+                // } else {
+                setIsConfirmOpen(true);
+                // }
+              }}
+              className="flex gap-1 items-center cursor-pointer"
+            >
+              {/* {file.shouldDelete ? (
                 <div className="flex gap-1 text-green-600 items-center cursor-pointer">
                   <UndoIcon className="w-4 h-4" /> Restore
                 </div>
               ) : ( */}
-            <div className="flex gap-1 text-red-600 items-center cursor-pointer">
-              <TrashIcon className="w-4 h-4" /> Delete
-            </div>
-            {/* )} */}
-          </DropdownMenuItem>
-          {/* </Protect> */}
+              <div className="flex gap-1 text-red-600 items-center cursor-pointer">
+                <TrashIcon className="w-4 h-4" /> Delete
+              </div>
+              {/* )} */}
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
