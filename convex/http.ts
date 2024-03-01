@@ -14,6 +14,7 @@ http.route({
     const headerPayload = request.headers;
 
     // @NOTE: These actions run in a specific isolated node runtime from convex
+    // each of the events MUST BE subscribed to from the clerk dashboard
     // see all webhooks from clerk dash: https://dashboard.clerk.com/apps/app_2d0IcTxg6ynkKPiOt0OBAyWvEeA/instances/ins_2d0IcWQ9jkBcVyRAWEABpyhrYJG/webhooks
 
     try {
@@ -32,22 +33,22 @@ http.route({
         case "user.created":
           await ctx.runMutation(internal.mutations.users.createUser, {
             tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.id}`,
-            // name: `${result.data.first_name ?? ""} ${
-            //   result.data.last_name ?? ""
-            // }`,
-            // image: result.data.image_url,
+            name: `${result.data.first_name ?? ""} ${
+              result.data.last_name ?? ""
+            }`,
+            image: result.data.image_url,
           });
           console.log(`user.created ${result.data.id}`);
           break;
-        // case "user.updated":
-        //   await ctx.runMutation(internal.users.updateUser, {
-        //     tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
-        //     name: `${result.data.first_name ?? ""} ${
-        //       result.data.last_name ?? ""
-        //     }`,
-        //     image: result.data.image_url,
-        //   });
-        //   break;
+        case "user.updated":
+          await ctx.runMutation(internal.mutations.users.updateUser, {
+            tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.id}`,
+            name: `${result.data.first_name ?? ""} ${
+              result.data.last_name ?? ""
+            }`,
+            image: result.data.image_url,
+          });
+          break;
         case "organizationMembership.created":
           await ctx.runMutation(internal.mutations.users.addOrgIdToUser, {
             tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,

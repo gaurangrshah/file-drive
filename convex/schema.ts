@@ -15,12 +15,15 @@ export const fileValidator = v.object({
   type: fileTypes,
   orgId: v.string(),
   fileId: v.id("_storage"),
+  userId: v.id("users"),
   shouldDelete: v.optional(v.boolean()),
 });
 
 export const roles = v.union(v.literal("admin"), v.literal("member"));
 export const userValidator = v.object({
   tokenIdentifier: v.string(),
+  name: v.optional(v.string()),
+  image: v.optional(v.string()),
   orgIds: v.array(
     v.object({
       orgId: v.string(),

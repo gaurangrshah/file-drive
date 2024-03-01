@@ -9,6 +9,7 @@ import Image from 'next/image';
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
 } from '@/components/ui/avatar';
 import {
   Card,
@@ -29,15 +30,17 @@ import {
 } from './file-actions';
 import { AspectRatio } from '../../../components/ui/aspect-ratio';
 import FileBadge from './file-badge';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export function FileCard({
   file,
 }: {
   file: Doc<"files"> & { isFavorited: boolean };
 }) {
-  // const userProfile = useQuery(api.users.getUserProfile, {
-  //   userId: file.userId,
-  // });
+  const userProfile = useQuery(api.queries.users.getUserProfile, {
+    userId: file.userId,
+  });
 
   const typeIcons = {
     image: <ImageIcon />,
@@ -86,10 +89,10 @@ export function FileCard({
       <CardFooter className="flex justify-between">
         <div className="flex gap-2 text-xs text-gray-700 w-40 items-center">
           <Avatar className="w-6 h-6">
-            {/* <AvatarImage src={userProfile?.image} /> */}
+            <AvatarImage src={userProfile?.image} />
             <AvatarFallback>GS</AvatarFallback>
           </Avatar>
-          {/* {userProfile?.name} */}
+          {userProfile?.name}
         </div>
         <div className="text-[10px] text-gray-700">
           Uploaded: <br />

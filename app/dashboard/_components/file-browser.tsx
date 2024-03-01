@@ -1,21 +1,27 @@
 "use client";
 
 import { useOrganization, useUser } from "@clerk/nextjs";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from '@/convex/_generated/api';
-import { Loader2 } from "lucide-react";
+import { Filter, GridIcon, Loader2, RowsIcon } from "lucide-react";
 import { EmptyFiles } from "./empty-files";
-import { RawFavorites, RawFiles } from "@/convex/schema";
+import { RawFavorites } from "@/convex/schema";
 import { FileCard } from "./file-card";
 import { SearchBar } from "@/app/_components/interface/search-bar";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DataTable } from "./file-table";
+import { Doc } from "@/convex/_generated/dataModel";
+import { columns } from "./columns";
 
 export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: string; favoritesOnly?: boolean; deletedOnly?: boolean }) {
   const [query, setQuery] = useState('')
+  const [type, setType] = useState<Doc<"files">["type"] | "all">("all");
+
   const organization = useOrganization()
   const user = useUser();
-  const createFile = useMutation(api.mutations.files.createFile)
   // query is being scoped by the orgId which we've defined in file://../convex/files.ts
   // first ensure the orgId is loaded and then pass it to the query or skip if no orgId
 
@@ -25,20 +31,21 @@ export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: stri
     orgId = String(organization.organization?.id ?? user.user?.id)
   }
 
-  const _favorites = useQuery(api.queries.favorites.getAllFavorites, { orgId: orgId! })
-  const files = useQuery(api.queries.files.getFiles, { orgId: orgId!, query, favoritesOnly, deletedOnly })
+  const typeQuery = type === "all" ? undefined : type
+
+  const favorites = useQuery(api.queries.favorites.getAllFavorites, { orgId: orgId! })
+  const files = useQuery(api.queries.files.getFiles, orgId ? { orgId: orgId, type: typeQuery, query, favoritesOnly, deletedOnly } : "skip");
 
   // @TODO: this is a bit of a mess, we should probably just use a join query
   // to get the favorited status of each file
   const joinedFiles = files?.map((file) => {
-    const isFavorited = _favorites?.some(
+    const isFavorited = (favorites ?? [])?.some(
       (favorite: RawFavorites) => favorite.fileId === file._id
     )
     return { ...file, isFavorited }
-  })
+  }) ?? [];
 
   const isLoading = files === undefined;
-
 
   return (
     <main className="container mx-auto pb-12 px-12">
@@ -49,21 +56,59 @@ export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: stri
           setQuery={setQuery}
         />
       </div>
-      <div className=''>
+      <Tabs defaultValue="grid">
+        <div className="flex justify-between items-center">
+          <TabsList className="mb-2">
+            <TabsTrigger value="grid" className="flex gap-2 items-center">
+              <GridIcon />
+              Grid
+            </TabsTrigger>
+            <TabsTrigger value="table" className="flex gap-2 items-center">
+              <RowsIcon /> Table
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex gap-2 items-center">
+            <Label htmlFor="type-select" className="sr-only" >Type Filter</Label>
+            <Filter className="absolute z-10 pl-1" />
+            <Select
+              value={type}
+              onValueChange={(newType) => {
+                setType(newType as any);
+              }}
+            >
+              <SelectTrigger id="type-select" className="ps-8 w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="image">Image</SelectItem>
+                <SelectItem value="csv">CSV</SelectItem>
+                <SelectItem value="pdf">PDF</SelectItem>
+                <SelectItem value="markdown">Markdown</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <TabsContent value="grid">
+          <div className="grid grid-cols-3 gap-4">
+            {joinedFiles?.map((file) => {
+              return <FileCard key={file._id} file={{ ...file, isFavorited: !!file.isFavorited }} />;
+            })}
+          </div>
+        </TabsContent>
         {isLoading ? (
-          <div className='flex flex-col justify-center items-center w-full relative'>
-            <Loader2
-              className="animate-spin flex-1"
-            />
+          <div className="absolute inset-0 flex flex-col gap-8 w-full items-center mt-24 h-[90vh] z-10">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+            <div className="text-2xl">Loading your files...</div>
           </div>
-        ) : files.length ? (
-          <div className="grid grid-cols-4 gap-4">
-            {joinedFiles?.map((file: RawFiles) => (
-              <FileCard key={file?._id ?? "test"} file={{ ...file, isFavorited: (file as any).isFavorited }} />
-            ))}
-          </div>
+        ) : joinedFiles?.length ? (
+          <TabsContent value="table">
+            <DataTable columns={columns} data={joinedFiles} />
+          </TabsContent>
         ) : <EmptyFiles extend={favoritesOnly} />}
-      </div>
+      </Tabs>
     </main>
   )
 }

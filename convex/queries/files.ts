@@ -2,6 +2,7 @@ import { v } from "convex/values";
 
 import { query } from "../_generated/server";
 import { hasAccessToOrg } from "../utils";
+import { fileTypes } from "../schema";
 
 export const getFiles = query({
   args: {
@@ -9,6 +10,7 @@ export const getFiles = query({
     query: v.optional(v.string()),
     favoritesOnly: v.optional(v.boolean()), // ! renamed to favoritesOnly
     deletedOnly: v.optional(v.boolean()),
+    type: v.optional(fileTypes),
   },
   async handler(ctx, args) {
     if (!args.orgId || typeof args.orgId !== "string") return [];
@@ -53,6 +55,9 @@ export const getFiles = query({
       files = files.filter((file) => {
         return file.name.toLowerCase().includes(query.toLowerCase());
       });
+    }
+    if (args.type) {
+      files = files.filter((file) => file.type === args.type);
     }
 
     return files?.length ? files : [];

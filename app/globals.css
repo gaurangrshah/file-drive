@@ -70,9 +70,13 @@
   * {
     @apply border-border scroll-smooth;
   }
+  body {
+    @apply bg-background text-foreground;
+  }
+
   body,
   html,
   :root {
-    @apply bg-background text-foreground h-full;
+    height: 100%;
   }
 }
