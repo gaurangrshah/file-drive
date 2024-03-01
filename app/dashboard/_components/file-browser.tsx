@@ -11,7 +11,7 @@ import { SearchBar } from "@/app/_components/interface/search-bar";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 
-export function FileBrowser({ title, favoritesOnly }: { title: string; favoritesOnly?: boolean }) {
+export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: string; favoritesOnly?: boolean; deletedOnly?: boolean }) {
   const [query, setQuery] = useState('')
   const organization = useOrganization()
   const user = useUser();
@@ -26,7 +26,7 @@ export function FileBrowser({ title, favoritesOnly }: { title: string; favorites
   }
 
   const _favorites = useQuery(api.queries.favorites.getAllFavorites, { orgId: orgId! })
-  const files = useQuery(api.queries.files.getFiles, { orgId: orgId!, query, favorites: favoritesOnly })
+  const files = useQuery(api.queries.files.getFiles, { orgId: orgId!, query, favorites: favoritesOnly, deletedOnly })
 
   // @TODO: this is a bit of a mess, we should probably just use a join query
   // to get the favorited status of each file

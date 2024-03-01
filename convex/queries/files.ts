@@ -7,7 +7,8 @@ export const getFiles = query({
   args: {
     orgId: v.optional(v.string()),
     query: v.optional(v.string()),
-    favorites: v.optional(v.boolean()),
+    favorites: v.optional(v.boolean()), // TODO: change to favrotiesOnly
+    deletedOnly: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
     if (!args.orgId || typeof args.orgId !== "string") return [];
@@ -36,6 +37,13 @@ export const getFiles = query({
       });
       // return statement deferred to the end of the function
       // this allows to search thru files that are favorited
+    }
+
+    // if deletedOnly is true, we only want to return files that are deleted
+    if (args.deletedOnly) {
+      files = files.filter((file) => file.shouldDelete);
+    } else {
+      files = files.filter((file) => !file.shouldDelete);
     }
 
     // if a query is provided this is a search intent

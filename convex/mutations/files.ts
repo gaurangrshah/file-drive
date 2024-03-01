@@ -61,7 +61,7 @@ export const deleteFile = mutation({
     if (!isAdmin) {
       throw new ConvexError("You do not have sufficient privileges.");
     }
-    // @TODO: remove any asscoiated favorites
+
     const favorites = await ctx.db
       .query("favorites")
       .withIndex("by_userId_orgId_fileId", (q) =>
@@ -71,13 +71,16 @@ export const deleteFile = mutation({
           .eq("fileId", args.fileId)
       )
       .collect();
-    console.log("🚀 | favorites:", favorites);
 
     for (const favorite of favorites) {
       console.log("deleting", favorite._id);
       await ctx.db.delete(favorite._id);
     }
 
-    await ctx.db.delete(args.fileId);
+    // mark files for deletion instead of deleting them directly
+    // allows for soft delete and we can run a convex cron job to actually delete the files
+    // the cron job will run periodically and delete files that are marked for deletion
+    await ctx.db.patch(args.fileId, { shouldDelete: true });
+    // await ctx.db.delete(args.fileId);
   },
 });
