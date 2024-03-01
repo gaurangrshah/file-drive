@@ -5,26 +5,49 @@ import { hasAccessToOrg } from "../utils";
 
 export const getFiles = query({
   args: {
-    orgId: v.string() || "skip",
+    orgId: v.optional(v.string()),
     query: v.optional(v.string()),
+    favorites: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
+    if (!args.orgId || typeof args.orgId !== "string") return [];
+
     const hasAccess = await hasAccessToOrg(ctx, args.orgId);
     if (!hasAccess) return [];
 
-    const files = await ctx.db
+    let files = await ctx.db
       .query("files")
-      .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
+      .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId!))
       .collect();
 
-    const query = args.query || undefined;
+    if (!hasAccess.user) return files;
 
-    if (!query || query === "") {
-      return files;
-    } else {
-      return files.filter((file) =>
-        file.name.toLowerCase().includes(query.toLowerCase())
-      );
+    // if favorites is true, we only want to return files that are favorited
+    if (args.favorites) {
+      console.log("🚀 | checking favorites:", args.favorites);
+      const favorites = await ctx.db
+        .query("favorites")
+        .withIndex("by_userId_orgId_fileId", (q) =>
+          q.eq("userId", hasAccess.user._id).eq("orgId", args.orgId!)
+        )
+        .collect();
+
+      files = files.filter((file) => {
+        return favorites.some((favorite) => favorite.fileId === file._id);
+      });
+      // return statement deferred to the end of the function
+      // this allows to search thru files that are favorited
     }
+
+    // if a query is provided this is a search intent
+    const query = args.query || undefined;
+    if (query) {
+      // NOTE: This is a simple search, we can make this more robust later
+      files = files.filter((file) => {
+        return file.name.toLowerCase().includes(query.toLowerCase());
+      });
+    }
+
+    return files?.length ? files : [];
   },
 });

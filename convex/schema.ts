@@ -22,6 +22,12 @@ export const userValidator = v.object({
   orgIds: v.array(v.string()),
 });
 
+export const favorites = v.object({
+  fileId: v.id("files"),
+  userId: v.id("users"),
+  orgId: v.string(),
+});
+
 export default defineSchema({
   // handlers: file:///./mutations/files.ts
   // queries: file:///./queries/files.ts
@@ -31,6 +37,14 @@ export default defineSchema({
   users: defineTable(userValidator).index("by_tokenIdentifier", [
     "tokenIdentifier",
   ]),
+  // handlers: file:///./mutations/favorites.ts
+  // queries: file:///./queries/favorites.ts
+  favorites: defineTable(favorites).index("by_userId_orgId_fileId", [
+    // composite index
+    "userId",
+    "orgId",
+    "fileId",
+  ]),
 });
 
 export type ConvexSchema = ReturnType<typeof defineSchema>;
@@ -39,6 +53,9 @@ export type CvxFiles = WithoutSystemFields<Doc<"files">>;
 
 export type RawUsers = Doc<"users">;
 export type CvxUsers = WithoutSystemFields<Doc<"users">>;
+
+export type RawFavorites = Doc<"favorites">;
+export type CvxFavorites = WithoutSystemFields<Doc<"favorites">>;
 
 export const fileTypesMap = {
   "image/png": "image",

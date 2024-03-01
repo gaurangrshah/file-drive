@@ -45,7 +45,7 @@ export function FileCardActions({
 }) {
   const deleteFile = useMutation(api.mutations.files.deleteFile);
   // const restoreFile = useMutation(api.files.restoreFile);
-  // const toggleFavorite = useMutation(api.files.toggleFavorite);
+  const toggleFavorite = useMutation(api.mutations.favorites.toggleFavorite);
   // const me = useQuery(api.users.getMe);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -93,9 +93,9 @@ export function FileCardActions({
 
           <DropdownMenuItem
             onClick={() => {
-              // toggleFavorite({
-              //   fileId: file._id,
-              // });
+              toggleFavorite({
+                fileId: file._id,
+              });
             }}
             className="flex gap-1 items-center cursor-pointer"
           >
