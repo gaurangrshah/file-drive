@@ -23,7 +23,6 @@ import { SearchBar } from './_components/interface/search-bar';
 export default function Home() {
   const organization = useOrganization()
   const user = useUser();
-  const createFile = useMutation(api.mutations.files.createFile)
   // query is being scoped by the orgId which we've defined in file://../convex/files.ts
   // first ensure the orgId is loaded and then pass it to the query or skip if no orgId
   const orgId = organization.organization?.id ?? user.user?.id!; // user id must exist
@@ -67,7 +66,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
     </main>
   );
 }
