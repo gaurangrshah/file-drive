@@ -11,38 +11,41 @@ export function SideNav() {
 
   return (
     <div className="w-40 flex flex-col gap-4 pt-8 border-r h-full">
-      <Link href="/dashboard/files">
-        <Button
-          variant={"link"}
-          className={clsx("flex gap-2", {
-            "text-blue-500": pathname.includes("/dashboard/files"),
-          })}
-        >
+      <Button
+        variant={"link"}
+        className={clsx("flex gap-2", {
+          "text-blue-500": pathname.includes("/dashboard/files"),
+        })}
+        asChild
+      >
+        <Link href="/dashboard/files">
           <FileIcon /> All Files
-        </Button>
-      </Link>
+        </Link>
+      </Button>
 
-      <Link href="/dashboard/favorites">
-        <Button
-          variant={"link"}
-          className={clsx("flex gap-2", {
-            "text-blue-500": pathname.includes("/dashboard/favorites"),
-          })}
-        >
+      <Button
+        variant={"link"}
+        className={clsx("flex gap-2", {
+          "text-blue-500": pathname.includes("/dashboard/favorites"),
+        })}
+        asChild
+      >
+        <Link href="/dashboard/favorites">
           <StarIcon /> Favorites
-        </Button>
-      </Link>
+        </Link>
+      </Button>
 
-      <Link href="/dashboard/trash">
-        <Button
-          variant={"link"}
-          className={clsx("flex gap-2", {
-            "text-blue-500": pathname.includes("/dashboard/trash"),
-          })}
-        >
+      <Button
+        variant={"link"}
+        className={clsx("flex gap-2", {
+          "text-blue-500": pathname.includes("/dashboard/trash"),
+        })}
+        asChild
+      >
+        <Link href="/dashboard/trash">
           <TrashIcon /> Trash
-        </Button>
-      </Link>
-    </div>
+        </Link>
+      </Button>
+    </div >
   );
 }
