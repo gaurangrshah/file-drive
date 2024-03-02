@@ -11,19 +11,11 @@ import Link from 'next/link';
 import { BgGradientBlur } from './_components/interface/bg-gradient-blur';
 
 export default function Home() {
-  const organization = useOrganization()
-  const user = useUser();
-  // query is being scoped by the orgId which we've defined in file://../convex/files.ts
-  // first ensure the orgId is loaded and then pass it to the query or skip if no orgId
-  const orgId = organization.organization?.id ?? user.user?.id!; // user id must exist
-  const currentOrgId = String(organization.isLoaded && user.isLoaded ? orgId : "skip");
-  const files = useQuery(api.queries.files.getFiles, { orgId: currentOrgId })
 
-  const isLoading = files === undefined;
   return (
     <main className="container m-auto p-12 flex-1">
       <BgGradientBlur />
-      <div className="mx-auto max-w-2xl py-8 mt-24">
+      <div className="mx-auto max-w-2xl py-8 mt-24 z-10">
         <div className="text-center">
           <Image
             src="/logo.png"
@@ -42,17 +34,17 @@ export default function Home() {
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
-              href="#filelist"
+              href="/dashboard/files"
               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Get started
             </Link>
-            <a
-              href="#"
+            {/* <a
+              href="/dashboard"
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               Learn more <span aria-hidden="true">→</span>
-            </a>
+            </a> */}
           </div>
         </div>
       </div>

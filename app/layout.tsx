@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <div className='w-full h-full flex flex-col relative gap-8'>
+          <div className='w-full h-full flex flex-col relative gap-8 z-0'>
             <Header />
             {children}
             <Footer />

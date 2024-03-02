@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <div className="container fixed bottom-0 py-4 px-12 bg-gray-100 mt-12 flex items-center">
+    <div className="container fixed bottom-0 py-4 px-12 bg-gray-100 mt-12 flex items-center  backdrop-blur-2xl bg-opacity-30">
       <div className="container mx-auto flex justify-between items-center">
         <div>FileDrive<span className="text-xs"> - for demo purposes only</span></div>
 
