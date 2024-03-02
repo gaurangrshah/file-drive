@@ -1,7 +1,7 @@
 import { UploadButton } from '@/app/_components/interface/upload-button'
 import Image from 'next/image'
 
-export function EmptyFiles({ extend }: { extend?: boolean }) {
+export function EmptyFiles({ extend }: { extend?: "favorites" | "trash" | null }) {
   return (
     <div className="col-span-4 text-center">
       <Image
@@ -12,7 +12,7 @@ export function EmptyFiles({ extend }: { extend?: boolean }) {
         className="inline-block mb-8"
       />
       <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl pb-8">
-        You have no {extend ? "favorites" : "files"} yet.
+        You have no {extend === 'favorites' ? "favorites" : "files"} {extend === 'trash' ? "in the trash" : ""} yet.
       </h1>
       <UploadButton />
       <p className="mt-6 text-lg leading-8 text-gray-600">

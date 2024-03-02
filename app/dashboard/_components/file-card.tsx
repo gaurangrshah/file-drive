@@ -80,7 +80,11 @@ export function FileCard({
             <GanttChartIcon className="w-32 h-32 border-2 border-blue-400 py-2 rounded-md" /></FileBadge>
         )}
         {file.type === "pdf" && (
-          <FileBadge type="pdf" className="bg-red-600" />
+          // <FileBadge type="pdf" className="bg-red-600" />
+          <iframe
+            className="doc"
+            src={`https://docs.google.com/gview?url=${getFileUrl(file.fileId)}&embedded=true`}
+          />
         )}
         {file.type === "markdown" && (
           <FileBadge type="md" className="bg-gray-600" />

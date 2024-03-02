@@ -19,8 +19,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { api } from '@/convex/_generated/api';
-import type { Doc } from '@/convex/_generated/dataModel';
-// import { useToast } from '@/components/ui/use-toast';
+
 import {
   useOrganization,
   useUser,
@@ -34,9 +33,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../components/ui/form';
-import { Input } from '../../../components/ui/input';
-import { ToastMessage } from '../../../components/ui/sonner';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { ToastMessage } from '@/components/ui/sonner';
 import { fileTypesMap } from '@/convex/schema';
 
 const formSchema = z.object({
@@ -127,7 +126,7 @@ export function UploadButton() {
         <DialogHeader>
           <DialogTitle className="mb-8">Upload your File Here</DialogTitle>
           <DialogDescription>
-            <p className="p-2 rounded-sm bg-yellow-100"><span className="font-bold">NOTE:</span> This file will be accessible by everyone in your organization</p>
+            {organization.organization?.id ? <p className="p-2 rounded-sm bg-yellow-100"><span className="font-bold">NOTE:</span> This file will be accessible by everyone in your organization</p> : <p className="p-2 rounded-sm bg-yellow-100"><span className="font-bold">NOTE:</span> This file will only be visible to your personally.</p>}
           </DialogDescription>
         </DialogHeader>
         <div>
@@ -138,9 +137,9 @@ export function UploadButton() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel className="sr-only">Title</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} placeholder="Your title" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -152,7 +151,7 @@ export function UploadButton() {
                 name="file"
                 render={() => (
                   <FormItem>
-                    <FormLabel>File</FormLabel>
+                    <FormLabel className='sr-only'>File</FormLabel>
                     <FormControl>
                       <Input type="file" {...fileRef} />
                     </FormControl>

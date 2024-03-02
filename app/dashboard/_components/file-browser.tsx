@@ -107,7 +107,7 @@ export function FileBrowser({ title, favoritesOnly, deletedOnly }: { title: stri
           <TabsContent value="table">
             <DataTable columns={columns} data={joinedFiles} />
           </TabsContent>
-        ) : <EmptyFiles extend={favoritesOnly} />}
+        ) : <EmptyFiles extend={favoritesOnly ? "favorites" : deletedOnly ? "trash" : null} />}
       </Tabs>
     </main>
   )
